@@ -15,10 +15,12 @@ class Database {
   }
 
   async connect() {
-    fs.mkdir(path.join(this.#dataDirectory), { recursive: true });
-    fs.access(path.join(this.#dataDirectory, this.#dataFilename)).catch(err => {
-      fs.writeFile(this.#dataFilepath, '');
-    });
+    await fs.mkdir(path.join(this.#dataDirectory), { recursive: true });
+    await fs
+      .access(path.join(this.#dataDirectory, this.#dataFilename))
+      .catch(err => {
+        fs.writeFile(this.#dataFilepath, '');
+      });
     const dataStr = await fs.readFile(this.#dataFilepath, {
       encoding: 'utf-8',
     });
@@ -26,12 +28,12 @@ class Database {
   }
 
   async clearDB() {
-    fs.writeFile(this.#dataFilepath, '');
+    await fs.writeFile(this.#dataFilepath, '');
     this.#emails = [];
   }
 
   async insertEmail(email) {
-    fs.appendFile(this.#dataFilepath, email + ' ');
+    await fs.appendFile(this.#dataFilepath, email + ' ');
     this.#emails.push(email);
   }
 
