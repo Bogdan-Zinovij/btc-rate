@@ -4,15 +4,14 @@ const fetch = require('node-fetch');
 
 const getRateService = async () => {
   const url = 'https://api.binance.com/api/v3/ticker/price?symbol=BTCUAH';
-  const options = {
-    method: 'GET',
-  };
-  const response = await fetch(url, options).then(res => res.json());
+  const response = await fetch(url);
+  const data = await response.json();
 
-  if (!response.price) {
+  if (!data.price) {
     throw new Error('Unexpected response from the 3rd party service');
   } else {
-    return +response.price;
+    const rate = parseInt(data.price);
+    return rate;
   }
 };
 
