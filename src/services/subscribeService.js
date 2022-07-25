@@ -1,6 +1,6 @@
 'use strict';
 
-const db = require('../db/db');
+const db = require('../db/database');
 
 const subscribeService = async email => {
   const isEmailExists = await db.checkEmail(email);

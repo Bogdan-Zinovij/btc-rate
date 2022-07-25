@@ -1,10 +1,10 @@
 'use strict';
 
 const fetch = require('node-fetch');
+const { BTC_TO_UAH_URL } = require('../config.js');
 
 const getRateService = async () => {
-  const url = 'https://api.binance.com/api/v3/ticker/price?symbol=BTCUAH';
-  const response = await fetch(url);
+  const response = await fetch(BTC_TO_UAH_URL);
   const data = await response.json();
 
   if (!data.price) {

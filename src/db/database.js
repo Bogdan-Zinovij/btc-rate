@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config();
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -9,8 +10,8 @@ class Database {
   #dataDirectory;
   #dataFilepath;
 
-  constructor(dataDirectory) {
-    this.#dataDirectory = dataDirectory;
+  constructor() {
+    this.#dataDirectory = path.join(__dirname, process.env.DB_FOLDER);
     this.#dataFilepath = path.join(this.#dataDirectory, this.#dataFilename);
   }
 
@@ -25,11 +26,6 @@ class Database {
       encoding: 'utf-8',
     });
     this.#emails = dataStr.trim().split(' ');
-  }
-
-  async clearDB() {
-    await fs.writeFile(this.#dataFilepath, '');
-    this.#emails = [];
   }
 
   async insertEmail(email) {
@@ -47,4 +43,4 @@ class Database {
   }
 }
 
-module.exports = Database;
+module.exports = new Database();
