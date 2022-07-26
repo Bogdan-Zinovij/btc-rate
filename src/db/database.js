@@ -19,8 +19,8 @@ class Database {
     await fs.mkdir(path.join(this.#dataDirectory), { recursive: true });
     await fs
       .access(path.join(this.#dataDirectory, this.#dataFilename))
-      .catch(err => {
-        fs.writeFile(this.#dataFilepath, '');
+      .catch(async err => {
+        await fs.writeFile(this.#dataFilepath, '');
       });
     const dataStr = await fs.readFile(this.#dataFilepath, {
       encoding: 'utf-8',

@@ -32,21 +32,16 @@ const sendEmailsService = async () => {
   const rate = await getRateService();
   const emails = await db.getAllEmails();
 
-  let mailOptions = {
+  const mailOptions = {
     from: 'bogdanzinovij.test@gmail.com',
     to: emails,
     subject: 'BTC-rate',
     text: `Current btc rate: ${rate}`,
   };
 
-  await transporter
-    .sendMail(mailOptions)
-    .then(res => {
-      console.log('All emails were sent successfully');
-    })
-    .catch(err => {
-      throw err;
-    });
+  await transporter.sendMail(mailOptions).catch(err => {
+    throw err;
+  });
 };
 
 module.exports = sendEmailsService;
