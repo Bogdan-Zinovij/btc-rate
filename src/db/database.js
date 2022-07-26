@@ -25,7 +25,9 @@ class Database {
     const dataStr = await fs.readFile(this.#dataFilepath, {
       encoding: 'utf-8',
     });
-    this.#emails = dataStr.trim().split(' ');
+    if (dataStr) {
+      this.#emails = dataStr.trim().split(' ');
+    }
   }
 
   async insertEmail(email) {
