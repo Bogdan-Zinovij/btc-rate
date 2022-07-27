@@ -16,7 +16,7 @@ oAuth2Client.setCredentials({ refresh_token: process.env.OAUTH_REFRESH_TOKEN });
 const sendEmailsService = async () => {
   const emails = await db.getAllEmails();
   if (!emails.length) {
-    throw new Error('The recipient list is empty');
+    return;
   }
 
   const { token } = await oAuth2Client.getAccessToken();
@@ -36,14 +36,36 @@ const sendEmailsService = async () => {
 
   const rate = await getRateService();
 
-  const mailOptions = {
-    from: process.env.MAIL_USERNAME,
-    to: emails,
-    subject: 'BTC-rate',
-    text: `Current btc rate: ${rate}`,
-  };
+  const unsentEmails = await Promise.allSettled(
+    emails.map(email => {
+      return new Promise(async (resolve, reject) => {
+        const mailOptions = {
+          from: process.env.MAIL_USERNAME,
+          to: email,
+          subject: 'BTC-rate',
+          text: `Exchange rate of BTC to UAH: ${rate}`,
+        };
 
-  await transporter.sendMail(mailOptions);
+        try {
+          await transporter.sendMail(mailOptions);
+          resolve(email);
+        } catch (err) {
+          reject(email);
+        }
+      });
+    })
+  ).then(results => {
+    const unsent = [];
+    results.forEach(result => {
+      if (result.status == 'rejected') {
+        unsent.push(result.reason);
+      }
+    });
+
+    return unsent;
+  });
+
+  return unsentEmails;
 };
 
 module.exports = sendEmailsService;
