@@ -16,7 +16,7 @@ class SubscribeController {
 
       const isAlreadySubscribed = await checkEmailService(email);
       if (isAlreadySubscribed) {
-        res.status(409).send();
+        return res.status(409).send();
       }
 
       await subscribeService(email);
