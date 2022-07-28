@@ -4,6 +4,11 @@ require('dotenv').config();
 const fs = require('fs').promises;
 const path = require('path');
 
+/*All e-mails separated by a space are stored in a txt file. When connecting
+to the database, all emails (if they exist) will be added to the array, 
+which the database methods will work with. When subscribing to an e-mail, it
+will be added to the array and to the txt file.*/
+
 class Database {
   #emails = [];
   #dataFilename = 'emails.txt';

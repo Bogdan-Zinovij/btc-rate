@@ -7,7 +7,7 @@ const getRateService = require('./getRateService');
 const { google } = require('googleapis');
 
 const oAuth2Client = new google.auth.OAuth2(
-  process.env.OAUTH_CLIENTID,
+  process.env.OAUTH_CLIENT_ID,
   process.env.OAUTH_CLIENT_SECRET,
   process.env.REDIRECT_URI
 );
@@ -26,10 +26,8 @@ const sendEmailsService = async () => {
     auth: {
       type: 'OAuth2',
       user: process.env.MAIL_USERNAME,
-      pass: process.env.MAIL_PASSWORD,
-      clientId: process.env.OAUTH_CLIENTID,
+      clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
-      refreshToken: process.env.OAUTH_REFRESH_TOKEN,
       accessToken: token,
     },
   });
